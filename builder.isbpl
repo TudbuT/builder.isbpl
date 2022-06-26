@@ -58,14 +58,14 @@ func build {
         } deps foreach
     }
     " @../build/buildfiles.txt\n" script stream.write
+    "E=$?" script stream.write
     "cd .. ; rm build/buildfiles.txt\n" script stream.write
+    "exit $E" script stream.write
     script STREAM.close stream
     "\n> Running javac...\n" puts
     ([ "bash" "build.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
-    0 eq dup if {
-        ": javac succeeded!" puts
-    } not if {
-        ": javac failed!\n > Abort!\n" puts
+    0 eq not if {
+        ": javac failed!" puts
         1 exit
     }
 }
@@ -83,12 +83,11 @@ func run {
     " " script stream.write
     mainClass script stream.write
     "\n" script stream.write
+    "exit $?" script stream.write
     script STREAM.close stream
     "\n> Running\n" puts
     ([ "bash" "run.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
-    0 eq dup if {
-        ": Run succeeded!" puts
-    } not if {
+    0 eq not if {
         ": Run failed!\n" puts
         1 exit
     }
@@ -121,14 +120,8 @@ func jar {
     ".jar' *\n" script stream.write
     "cd .. ; rm -rf jar\n" script stream.write
     script STREAM.close stream
-    "\n> Building jarfile\n" puts
-    ([ "bash" "jar.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
-    0 eq dup if {
-        ": Building jar succeeded!" puts
-    } not if {
-        ": Building jar failed!\n" puts
-        1 exit
-    }
+    "\n> Building jarfile...\n" puts
+    ([ "bash" "jar.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0 pop
 }
 
 func makeManifest {
@@ -141,7 +134,26 @@ func makeManifest {
     file STREAM.close stream
 }
 
-def tasks [ "build" "makeManifest" "run" "jar" ] =tasks
+func clean {
+    def script "clean.sh" STREAM.create.file.out stream =script
+    "\n> Cleaning..." puts
+    "rm clean.sh\n" script stream.write
+    {
+        with file ;
+        "rm -rf '" script stream.write
+        file script stream.write
+        "'\n" script stream.write
+    } [ 
+        "build"
+        "lib"
+        name ".jar" strconcat
+        "run.sh"
+    ] foreach
+    script STREAM.close stream
+    ([ "bash" "clean.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0 pop
+}
+
+def tasks [ "clean" "build" "makeManifest" "run" "jar" ] =tasks
 
 func task {
     [ swap ] tasks aadd =tasks
