@@ -4,6 +4,7 @@ def ProcessBuilder "java.lang.ProcessBuilder" JIO class =ProcessBuilder
 def URL "java.net.URL" JIO class =URL
 def String "java.lang.String" JIO class =String
 def File "java.io.File" JIO class =File
+def Files "java.nio.Files" JIO class =Files
 
 def deps 
 
@@ -33,7 +34,7 @@ func file {
         name
         2 stop
     }
-    newfile file°copyTo1
+    file°toPath0 newfile°toPath0 Files°copy2
     name
 }
 
