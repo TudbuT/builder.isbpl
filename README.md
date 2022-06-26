@@ -1,6 +1,6 @@
 # builder.isbpl
 
-A simple build script processor for Java applications written in ISBPL.
+A simple build script processor for Java applications written in [ISBPL](https://github.com/TudbuT/ISBPL).
 
 ## Add dependencies
 
