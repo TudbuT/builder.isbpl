@@ -138,7 +138,7 @@ func javadoc {
     "rm files.txt\n" script stream.write
     "rm '" script stream.write
     name script stream.write
-    "-javadoc.jar'\n" script stream.write
+    "-javadoc.zip'\n" script stream.write
     "zip -r ../'" script stream.write
     name script stream.write
     "'-javadoc.zip *\n" script stream.write
