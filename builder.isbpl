@@ -58,9 +58,9 @@ func build {
         } deps foreach
     }
     " @../build/buildfiles.txt\n" script stream.write
-    "E=$?" script stream.write
+    "E=$?\n" script stream.write
     "cd .. ; rm build/buildfiles.txt\n" script stream.write
-    "exit $E" script stream.write
+    "exit $E\n" script stream.write
     script STREAM.close stream
     "\n> Running javac...\n" puts
     ([ "bash" "build.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
@@ -83,7 +83,7 @@ func run {
     " " script stream.write
     mainClass script stream.write
     "\n" script stream.write
-    "exit $?" script stream.write
+    "exit $?\n" script stream.write
     script STREAM.close stream
     "\n> Running\n" puts
     ([ "bash" "run.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
