@@ -73,6 +73,7 @@ func download {
     while { inp°read0 dup -1 eq not } {
         file STREAM.write stream
     }
+    pop
     file STREAM.close
     "\n: Took " puts
     ((getms ms -) (1000 _long) / dup =ms) ltos puts
