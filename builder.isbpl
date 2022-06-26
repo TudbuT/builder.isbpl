@@ -111,7 +111,39 @@ func build {
     ([ "bash" "build.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
     0 eq not if {
         ": javac failed!" puts
-        1 exit
+    }
+}
+
+func javadoc {
+    def script "javadoc.sh" STREAM.create.file.out stream =script
+    "\n> Generating javadoc command..." puts
+    "rm javadoc.sh\n" script stream.write
+    "mkdir javadoc > /dev/null 2>&1\n" script stream.write
+    "mkdir src > /dev/null 2>&1\n" script stream.write
+    "cd src ; find . | grep '\\.java$' | sed 's/^\\.\\/\\(.*\\)$/\\1/g' > ../javadoc/files.txt\n" script stream.write
+    "javadoc -d ../javadoc " script stream.write
+    deps°alen if {
+        "-cp " script stream.write
+        {
+            with dep ;
+            "'../lib/" script stream.write
+            dep script stream.write
+            "':" script stream.write
+        } deps foreach
+    }
+    " @../javadoc/files.txt\n" script stream.write
+    "E=$?\n" script stream.write
+    "cd ../javadoc\n" script stream.write
+    "rm files.txt\n" script stream.write
+    "zip -r ../'" script stream.write
+    name script stream.write
+    "'-javadoc.zip *\n" script stream.write
+    "exit $E\n" script stream.write
+    script STREAM.close stream
+    "\n> Running javadoc...\n" puts
+    ([ "bash" "javadoc.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
+    0 eq not if {
+        ": javadoc failed!" puts
     }
 }
 
@@ -193,12 +225,14 @@ func clean {
         "lib"
         name ".jar" strconcat
         "run.sh"
+        "javadoc"
+        name "-javadoc.zip" strconcat
     ] foreach
     script STREAM.close stream
     ([ "bash" "clean.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0 pop
 }
 
-def tasks [ "clean" "build" "makeManifest" "run" "jar" ] =tasks
+def tasks [ "javadoc" "clean" "build" "makeManifest" "run" "jar" ] =tasks
 
 func task {
     [ swap ] tasks aadd =tasks
