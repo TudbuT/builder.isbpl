@@ -1,4 +1,5 @@
 "#stream.isbpl" include
+"#time.isbpl" include
 
 def ProcessBuilder "java.lang.ProcessBuilder" JIO class =ProcessBuilder
 def URL "java.net.URL" JIO class =URL
@@ -49,14 +50,16 @@ func download {
     (url URL)°new1 =url
     def name (url°getPath0 "/" )°strsplit =name
     (name (name°alen 1 -))°aget =name
+    def newfile (("lib/" name)°strconcat File°new1) =newfile
     "\n> Downloading " puts
     name puts
     "..." puts
-    (("lib/" name)°strconcat File°new1)°exists0 if {
+    newfile°exists0 if {
         "\n: Skipped. (Force by deleting lib/" puts name puts ")" puts
         name
         2 stop
     }
+    def ms getms =ms
     def inp
     "Java" try {
         url°openStream0 =inp
@@ -67,10 +70,15 @@ func download {
         2 stop
     }
     def file ("lib/" name)°strconcat STREAM.create.file.out stream =file
-    def x
-    while { inp°read0 dup =x -1 eq not } {
-        x file STREAM.write stream
+    while { inp°read0 dup -1 eq not } {
+        file STREAM.write stream
     }
+    file STREAM.close
+    "\n: Took " puts
+    ((getms ms -) (1000 _long) / dup =ms) ltos puts
+    "s (" puts
+    ((newfile°length0 ms /) (1000 _long) /) ltos puts
+    "Kbps)" puts
     name
 }
 
