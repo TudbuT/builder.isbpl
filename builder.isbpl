@@ -13,7 +13,7 @@ func download {
     (url URL)°new1 =url
     def name (url°getPath0 "/" )°strsplit =name
     (name (name°alen 1 -))°aget =name
-    "> Downloading " puts
+    "\n> Downloading " puts
     name puts
     "..." puts
     (("lib/" name)°strconcat File°new1)°exists0 if {
