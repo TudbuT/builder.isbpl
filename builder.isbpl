@@ -74,7 +74,7 @@ func download {
         file STREAM.write stream
     }
     pop
-    file STREAM.close
+    file STREAM.close stream
     "\n: Took " puts
     ((getms ms -) (1000 _long) / dup =ms) ltos puts
     "s (" puts
