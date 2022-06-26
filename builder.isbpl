@@ -164,7 +164,7 @@ func run {
     " " script stream.write
     mainClass script stream.write
     " " script stream.write
-    "ARGS" System°getenv script stream.write
+    "ARGS" System°getenv1 dup if { dup script stream.write } pop
     "\n" script stream.write
     "exit $?\n" script stream.write
     script STREAM.close stream
