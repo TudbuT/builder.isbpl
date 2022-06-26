@@ -1,5 +1,8 @@
 #!isbpl
-"build.isbpl" include
+"builder.isbpl" include
+
+"Main" =mainClass
+"defaultProject" =name
 
 func dependencies {
     "https://github.com/TudbuT/tuddylib/raw/master/TuddyLIB.jar" download 
