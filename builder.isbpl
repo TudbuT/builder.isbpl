@@ -6,6 +6,7 @@ def URL "java.net.URL" JIO class =URL
 def String "java.lang.String" JIO class =String
 def File "java.io.File" JIO class =File
 def Files "java.nio.file.Files" JIO class =Files
+def System "java.lang.System" JIO class =System
 
 def deps 
 
@@ -162,6 +163,8 @@ func run {
     } deps foreach
     " " script stream.write
     mainClass script stream.write
+    " " script stream.write
+    "ARGS" System°getenv script stream.write
     "\n" script stream.write
     "exit $?\n" script stream.write
     script STREAM.close stream
