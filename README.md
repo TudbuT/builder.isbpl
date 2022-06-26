@@ -7,7 +7,7 @@ A simple build script processor for Java applications written in ISBPL.
 You have multiple options:
 - Download: `"https://url.to/the/jar/file" download`
 - Local file: `"/path/to/file.jar"`
-- Custom processor: Define a function that takes whatever you want, adds the disired jarfile to lib/, and returns its name.
+- Custom processor: Define a function that takes whatever you want, adds the desired jarfile to lib/, and returns its name.
 
 All dependencies are added to the completed jarfile.
 
