@@ -4,7 +4,7 @@ def ProcessBuilder "java.lang.ProcessBuilder" JIO class =ProcessBuilder
 def URL "java.net.URL" JIO class =URL
 def String "java.lang.String" JIO class =String
 def File "java.io.File" JIO class =File
-def Files "java.nio.Files" JIO class =Files
+def Files "java.nio.file.Files" JIO class =Files
 
 def deps 
 
@@ -16,6 +16,7 @@ func ensureDepsExist {
 
 func file {
     with path ;
+    ("lib" File°new1)°mkdir0 pop
     def file (path File°new1) =file
     def name file°getName0 =name
     def newfile (("lib/" name)°strconcat File°new1) =newfile
@@ -34,7 +35,11 @@ func file {
         name
         2 stop
     }
-    file°toPath0 newfile°toPath0 Files°copy2
+    "Java" try {
+        file°toPath0 newfile°toPath0 0 anew Files°copy3 pop
+    } {
+        pop pop pop printStackTrace0
+    }
     name
 }
 
@@ -56,7 +61,7 @@ func download {
     "Java" try {
         url°openStream0 =inp
     } {
-        pop pop °printStackTrace0
+        pop pop pop printStackTrace0
         "\n: Download failed." puts
         name
         2 stop
