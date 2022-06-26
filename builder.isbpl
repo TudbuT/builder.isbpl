@@ -217,14 +217,16 @@ func makeManifest {
     file STREAM.close stream
 }
 
-def toClean [ 
+def extraToClean 0 anew =extraToClean
+
+func toClean { [ 
     "build"
     "lib"
     name ".jar" strconcat
     "run.sh"
     "javadoc"
     name "-javadoc.zip" strconcat
-] =toClean
+] extraToClean aadd }
 
 func clean {
     def script "clean.sh" STREAM.create.file.out stream =script
@@ -251,7 +253,7 @@ func isATask {
 }
 
 func isToClean {
-    [ swap ] toClean aadd =toClean
+    [ swap ] extraToClean aadd =extraToClean
 }
 
 "Placeholders begin" #
