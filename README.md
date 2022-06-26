@@ -23,6 +23,15 @@ All dependencies are added to the completed jarfile.
 
 To autogenerate a manifest, add `makeManifest` in front of the `jar`.
 
+## Default tasks
+
+- clean
+- build
+- makeManifest
+- jar
+- javadoc
+- run
+
 ## Use a custom buildscript
 
 ```isbpl
