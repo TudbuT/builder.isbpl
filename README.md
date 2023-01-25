@@ -5,9 +5,9 @@ A simple build script processor for Java applications written in [ISBPL](https:/
 ## Add dependencies
 
 You have multiple options:
-- Download: `"https://url.to/the/jar/file" download`
-- Local file: `"/path/to/file.jar" file`
-- Custom processor: Define a function that takes whatever you want, adds the desired jarfile to lib/, and returns its name.
+- Download: `JAR-[INCLUDE/EXCLUDE] "https://url.to/the/jar/file" download`
+- Local file: `JAR-[INCLUDE/EXCLUDE] "/path/to/file.jar" file`
+- Custom processor: Define a function that takes whatever you want, adds the desired jarfile to lib/, and returns [ if it should be added to jar, its name ].
 
 All dependencies are added to the completed jarfile.
 
@@ -18,7 +18,7 @@ All dependencies are added to the completed jarfile.
 
 ## Make a jar
 
-- With rebuild: `isbpl build.isbpl build jar`
+- With rebuild: `isbpl build.isbpl build makeManifest jar`
 - Without rebuild: `isbpl build.isbpl jar`
 
 To autogenerate a manifest, add `makeManifest` in front of the `jar`.
