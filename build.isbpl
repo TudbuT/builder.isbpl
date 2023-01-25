@@ -5,5 +5,5 @@
 "defaultProject" =name
 
 func dependencies {
-    "https://github.com/TudbuT/tuddylib/raw/master/TuddyLIB.jar" download 
+    JAR-INCLUDE "https://github.com/TudbuT/tuddylib/raw/master/TuddyLIB.jar" download 
 }

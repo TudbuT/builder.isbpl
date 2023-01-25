@@ -8,6 +8,9 @@ def File "java.io.File" JIO class =File
 def Files "java.nio.file.Files" JIO class =Files
 def System "java.lang.System" JIO class =System
 
+func JAR-INCLUDE { 1 }
+func JAR-EXCLUDE { 0 }
+
 def deps 
 
 func ensureDepsExist {
@@ -17,7 +20,7 @@ func ensureDepsExist {
 }
 
 func file {
-    with path ;
+    with includeInJar path ;
     ("lib" File°new1)°mkdir0 pop
     def file (path File°new1) =file
     def name file°getName0 =name
@@ -42,11 +45,11 @@ func file {
     } {
         pop pop pop printStackTrace0
     }
-    name
+    [ includeInJar name ]
 }
 
 func download {
-    with url ;
+    with includeInJar url ;
     ("lib" File°new1)°mkdir0 pop
     (url URL)°new1 =url
     def name (url°getPath0 "/" )°strsplit =name
@@ -81,7 +84,7 @@ func download {
     "s (" puts
     ((newfile°length0 ms /) (1000 _long) /) ltos puts
     "Kbps)" puts
-    name
+    [ includeInJar name ]
 }
 
 func build {
@@ -99,7 +102,7 @@ func build {
         {
             with dep ;
             "'../lib/" script stream.write
-            dep script stream.write
+            dep 1 aget script stream.write
             "':" script stream.write
         } deps foreach
     }
@@ -112,6 +115,7 @@ func build {
     ([ "bash" "build.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
     0 eq not if {
         ": javac failed!" puts
+        1 exit
     }
 }
 
@@ -128,7 +132,7 @@ func javadoc {
         {
             with dep ;
             "'../lib/" script stream.write
-            dep script stream.write
+            dep 1 aget script stream.write
             "':" script stream.write
         } deps foreach
     }
@@ -148,6 +152,7 @@ func javadoc {
     ([ "bash" "javadoc.sh" ] ProcessBuilder°new1)°inheritIO0°start0°waitFor0
     0 eq not if {
         ": javadoc failed!" puts
+        1 exit
     }
 }
 
@@ -158,7 +163,7 @@ func run {
     {
         with dep ;
         "'lib/" script stream.write
-        dep script stream.write
+        dep 1 aget script stream.write
         "':" script stream.write
     } deps foreach
     " " script stream.write
@@ -183,14 +188,16 @@ func jar {
     "mkdir jar > /dev/null 2>&1\n" script stream.write
     {
         with dep ;
-        "cp 'lib/" script stream.write
-        dep script stream.write
-        "' jar\n" script stream.write
-        "cd jar ; unzip -o '" script stream.write
-        dep script stream.write
-        "' > /dev/null ; rm '" script stream.write
-        dep script stream.write
-        "' ; cd ..\n" script stream.write
+        dep 0 aget if {
+            "cp 'lib/" script stream.write
+            dep 1 aget script stream.write
+            "' jar\n" script stream.write
+            "cd jar ; unzip -o '" script stream.write
+            dep 1 aget script stream.write
+            "' > /dev/null ; rm '" script stream.write
+            dep 1 aget script stream.write
+            "' ; cd ..\n" script stream.write
+        }
     } deps foreach
     "cp -r build/* jar\n" script stream.write
     "cp -r res/* jar\n" script stream.write
